@@ -15,6 +15,7 @@
 
 class Simulator {
 private:
+	bool printMovie;
 	int L;
 	int Q;
 	int k;
@@ -41,28 +42,19 @@ private:
 	 */
 	void simulationStep(int**);
 	void reset(ToricCode*&, Automaton***&, int);
-	void init(ToricCode*&, Automaton***&, int, int, int, int, int, double, double, int, int);
+	void init(ToricCode*&, Automaton***&, int, int, int, int, int, double, double, int, int,bool);
 	void simulationStep(ToricCode*&, Automaton***&, int);
 
 public:
-	/* functions implementing tests */
-	void level0ErrorCorrectionTest();
-	void level1ErrorCorrectionTest();
-	void level0SyndromeCorrectionTest();
-	/* funtion to generate a threshold curve for the harrington decoder */
-	std::list<double> generateThresholdCurve(int, int, int, int, int, int, double, double, int, int);
-	/* funtion to generate a threshold curve for the minimum weight perfect matching decoder */
-	void generateMWMThresholdCurve(int, int, int, double, double);
 	/* funtion to generate a decay time curve for the harrington decoder */
-	std::list<int> generateDecayCurve(int, int, int, int, int, int, double, int, int);
-	/* funtion to generate a decay time curve for the minimum weight perfect matching decoder */
-	std::list<int> generateMWMDecayCurve(int, double);
+	std::list<int> generateDecayCurve(int, int, int, int, int, int, double, int, int, bool);
 
 	int getTmax();
 	int getN();
 
 	void setTmax(int);
 	void setN(int);
+	void setPrintMovie(bool);
 
 	Simulator();
 	virtual ~Simulator();

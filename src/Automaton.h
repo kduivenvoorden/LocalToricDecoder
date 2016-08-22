@@ -18,23 +18,25 @@ private:
 	int syndromes[9];
 	double fc;
 	double fn;
+	bool printMovie;
 	std::vector<AutomatonMemoryDataset*> memory;
 	Automaton** neighbors;
 	Qubit** qubits;
 
-	void localUpdateRules(Point, int[], Bit*[], int);
+	int localUpdateRules(Point, int[], Bit*[], int);
 	int ipow(int, int);
+	void printRule(int, int );
 public:
-	Automaton(Point, int, int, int, int, int, double, int, int);
+	Automaton(Point, int, int, int, int, int, double, int, int,bool);
 	virtual ~Automaton();
 
 	void setNeighbors(Automaton**);
 	void setQubits(Qubit**);
 	void setSyndrome(int);
 
-	void localUpdates();
+	void localDependencies();
 	void executeFlips();
-	void signalUpdates();
+	void caUpdates();
 
 };
 

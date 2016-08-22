@@ -16,7 +16,7 @@
 #include <list>
 #include <algorithm>
 
-ToricCode::ToricCode(int L, double p, double q) : L(L), p(p), q(q), mt(generator()), distribution(0.0,1.0) {
+ToricCode::ToricCode(int L, double p, double q, bool printMovie) : L(L), p(p), q(q), mt(generator()), distribution(0.0,1.0), printMovie(printMovie) {
 	this->vertices = new int*[L];
 	this->starSyndromes = new int*[L];
 	this->faultySyndromes = new int*[L];
@@ -129,6 +129,7 @@ int** ToricCode::getStarSyndromes(){
 	return starSyndromes;
 }
 
+
 void ToricCode::introduceErrors(){
 	double randnum;
 	for(int i = 0; i < this->L; i++){
@@ -148,6 +149,50 @@ void ToricCode::introduceErrors(){
 		}
 	}
 }
+
+void ToricCode::viewQubitErrors(){
+	for(int i = 0; i < this->L; i++){
+		for(int j = 0; j < this->L; j++){
+			for(int k = 0; k < 2; k++){
+				if (this->edges[i][j][k].bit ==  1)
+					std::cout << i<< " "<<j<< " " << k << std::endl;
+			}
+		}
+	}
+	std::cout << "-1" << std::endl;
+}
+
+void ToricCode::viewSyndromeErrors(){
+	for(int i = 0; i < this->L; i++){
+		for(int j = 0; j < this->L; j++){
+			if (this->faultySyndromes[i][j] == 1)
+				std::cout << i<< " "<<j<< " " << std::endl;
+		}
+	}
+	std::cout << "-1" << std::endl;
+}
+
+void ToricCode::viewStarSyndromes(){
+	for(int i = 0; i < this->L; i++){
+		for(int j = 0; j < this->L; j++){
+			if(this->starSyndromes[i][j] ==1)
+				std::cout << i<< " "<<j<< " " << std::endl;
+		}
+	}
+	std::cout << "-1" << std::endl;
+}
+
+void ToricCode::viewRealStarSyndromes(){
+	for(int i = 0; i < this->L; i++){
+		for(int j = 0; j < this->L; j++){
+			if(this->starSyndromes[i][j]^faultySyndromes[i][j] ==1)
+				std::cout << i<< " "<<j<< " " << std::endl;
+		}
+	}
+	std::cout << "-1" << std::endl;
+}
+
+
 
 bool ToricCode::hasSyndrome(){
 	for(int i = 0; i < this->L; i++){
@@ -519,6 +564,22 @@ bool ToricCode::hasLogicalErrorAfterMWM(){
 	//this->dump(this->starSyndromes, edges, L);
 
 	bool logicalError = this->hasLogicalError(edges, L);
+	if (logicalError && printMovie){
+		this-> viewQubitErrors();
+		this-> viewRealStarSyndromes();
+		for(int i = 0; i < L; i++){
+			for(int j = 0; j < L; j++){
+				if (edges[i][j][0].bit==1)
+					std::cout << i << " " << j << " " << i << " " << j << ".5 " << i << ".5 " << (j+1)%L << " " << i << ".5 " << (j+1)%L << ".5"<< std::endl;
+				if (edges[i][j][1].bit==1)	
+					std::cout << i << " " << j << " " << i << ".5 " << j << " " << (i+1)%L << " " << j << ".5 " << (i+1)%L << ".5 " << j << ".5"<< std::endl;					
+			}
+		}
+	}
+		
+	
+	
+	
 	for(int i = 0; i < L; i++){
 		for(int j = 0; j < L; j++){
 			delete[] edges[i][j];

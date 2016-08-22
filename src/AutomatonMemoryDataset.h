@@ -37,6 +37,8 @@ public:
 	int Q;
 	int U;
 	int b;
+	std::vector<int> isFlipedSignal;
+	std::vector<int> newIsFlipedSignal;
 
 	AutomatonMemoryDataset(Point, int, int, int);
 	virtual ~AutomatonMemoryDataset();
